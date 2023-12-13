@@ -6,7 +6,7 @@
 def find_reflection(current_lines):
     reflection=False
     idx=0
-    while not reflection and idx<len(current_lines)-2:
+    while not reflection and idx<len(current_lines)-1:
         n_lines = min(idx+1, len(current_lines)-idx-1)
         count_ok = 0
         for i in range(0, n_lines):
