@@ -4,7 +4,7 @@
 
 
 def main():
-    with open("input.txt", "r") as f:
+    with open("test.txt", "r") as f:
         lines = f.readlines()
 
     platform =  []
@@ -19,7 +19,7 @@ def main():
 
     while not tilted:
         tilted = True
-        for i, row in enumerate(lines):
+        for i, row in enumerate(platform):
             for j, ch in enumerate(row):
                 if platform[i][j] == 'O' and platform[i-1][j] == '.' and i>0:
                     platform[i][j] = '.'
