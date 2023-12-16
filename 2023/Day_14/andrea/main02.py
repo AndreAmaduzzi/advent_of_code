@@ -74,7 +74,7 @@ def main():
         #     break
         # seen.append(platform)
 
-        if not found_cycle and (found_cycle := platform in seen):
+        if not found_cycle and (found_cycle := hash(platform) in seen):
             cycle_length = cycle - seen[platform]
             cycle += cycle_length * ((goal - cycle) // cycle_length)
         else:
@@ -94,7 +94,7 @@ def main():
 
     print('Soluzione:')
     print(sum)
-    print(load(seen[(1000000000 - i) % (start - i) + i - 1]))
+    # print(load(seen[(1000000000 - i) % (start - i) + i - 1]))
 
 
 if __name__ == "__main__":
