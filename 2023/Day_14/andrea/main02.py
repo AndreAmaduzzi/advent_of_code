@@ -83,7 +83,7 @@ def main():
                 
 
     print('Soluzione:')
-    print(sum)
+    print(sum)  # Soluzione: 99641
 
 
 if __name__ == "__main__":
