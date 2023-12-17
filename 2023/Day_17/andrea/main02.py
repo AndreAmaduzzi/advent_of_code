@@ -43,12 +43,9 @@ def main():
     with open('input.txt', 'r') as f:
         grid = f.read().split()
     m, n = len(grid), len(grid[0])
-    min_count_a, max_count_a = 0, 3
     min_count_b, max_count_b = 4, 10
     
-    sol = a_b(min_count_a, max_count_a, grid)
-    # print(a_b(min_count_a, max_count_a))
-    # print(a_b(min_count_b, max_count_b))
+    sol = a_b(min_count_b, max_count_b, grid)
 
     print('Soluzione:')
     print(sol)
