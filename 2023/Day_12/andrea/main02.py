@@ -17,11 +17,13 @@ def recurse(lava, springs, result=0):
     return result
 
 def main():
+
     with open("input.txt", "r") as file:
         data = [x.split() for x in file.read().splitlines()]
         sum = 0
         for e, (lava, springs) in enumerate(data):
-            sum += recurse(lava, (springs := tuple(map(int, springs.split(",")))))
+            springs = tuple(map(int, springs.split(",")))
+            sum += recurse("?".join([lava] * 5), springs * 5)
 
     print("Soluzione:")
     print(sum)
