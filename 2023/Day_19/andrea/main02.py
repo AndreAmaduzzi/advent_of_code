@@ -2,7 +2,6 @@
 19th December, 2023
 """
 
-
 import re
 
 
@@ -56,8 +55,14 @@ def main():
         matches = re.findall(rule_regex, rest_line)
         for match in matches:
             rules.append((match[0], match[1]))
+            # print(match[0], match[1], match[2], match[3])
         rules.append(('True', default))
         workflows[name] = rules
+
+    # P: (parts) set of parts; each part is a 4-size tuple representing 'x','m','a','s' values
+    # WF: (workflows) dict of workflows; key=[workflow's name] value=[list of workfllow rules];
+    #     each rule is a 2-size tuple (condition, success_condition_workflow); the last rule
+    #     has 'True' as condition
 
     total_sum = 0
     for part in parts:
