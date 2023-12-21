@@ -2,8 +2,6 @@
 17th December, 2023
 """
 
-from matplotlib.path import Path
-
 MOVES = {
         ("R"): (0, 1),
         ("L"): (0, -1),
