@@ -12,7 +12,6 @@ def calculate_ranges_product(ranges):
     return product
 
 
-
 def get_accepted_comb_number(ranges, wf_name, workflows):
     # BASE CASE (1)
     if wf_name == 'R':
