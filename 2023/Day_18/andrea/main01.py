@@ -7,10 +7,6 @@ MOVES = {
         ("L"): (0, -1),
         ("U"): (-1, 0),
         ("D"): (1, 0),
-        '0': (1,0), 
-        '1': (0,1),
-        '2': (-1,0),
-        '3': (0,-1)
     }
 
 def main():
@@ -18,9 +14,7 @@ def main():
     with open('input.txt', 'r') as f:
         lines = f.readlines()
    
-    directions = []
     steps = []
-    dig_plan = []
 
     for line in lines:
         steps.append((line.split(' ')[0], int(line.split(' ')[1]))) 
