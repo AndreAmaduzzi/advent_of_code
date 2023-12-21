@@ -1,4 +1,6 @@
-#!/usr/bin/env python3
+"""
+20th December, 2023
+"""
 
 import sys
 from collections import deque
@@ -21,17 +23,6 @@ def propagate_pulse(graph, flops, conjs, sender, receiver, pulse):
 	for new_receiver in graph[receiver]:
 		yield receiver, new_receiver, next_pulse
 
-def run(graph, flops, conjs):
-	q = deque([('button', 'broadcaster', False)])
-	nhi = nlo = 0
-
-	while q:
-		sender, receiver, pulse = q.popleft()
-		nhi += pulse
-		nlo += not pulse
-		q.extend(propagate_pulse(graph, flops, conjs, sender, receiver, pulse))
-
-	return nhi, nlo
 
 def find_periods(graph, flops, conjs):
 	periodic = set()
@@ -84,33 +75,22 @@ def main():
             conjs[source] = {}
 
         graph[source] = dests
-	
-    # print(graph)
 
     for source, dests in graph.items():
         for dest in filter(conjs.__contains__, dests):
             conjs[dest][source] = False
 
-    tothi = totlo = 0
-    for _ in range(1000):
-        nhi, nlo = run(graph, flops, conjs)
-        tothi += nhi
-        totlo += nlo
+    for f in flops:
+        flops[f] = False
 
-    sol = totlo * tothi
+    for inputs in conjs.values():
+        for i in inputs:
+            inputs[i] = False
+
+    sol = lcm(*find_periods(graph, flops, conjs))
+	
     print('Soluzione:')
     print(sol)
-
-
-    # for f in flops:
-    #     flops[f] = False
-
-    # for inputs in conjs.values():
-    #     for i in inputs:
-    #         inputs[i] = False
-
-    # answer2 = lcm(*find_periods(graph, flops, conjs))
-    # print('Part 2:', answer2)
 
 
 if __name__ == "__main__":
