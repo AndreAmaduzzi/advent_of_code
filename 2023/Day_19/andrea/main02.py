@@ -5,25 +5,53 @@
 import re
 
 
-def is_accepted(part, workflows):
-    x, m, a, s  = part
-    part_dict = {
-        'x': x,
-        'm': m,
-        'a': a,
-        's': s
-    }
-                
-    current_wf_name = 'in'
-    while current_wf_name not in ['A', 'R']:
-        current_wf = workflows[current_wf_name]
-        for rule in current_wf:
-            condition, success_condition_wf = rule
-            if eval(condition, part_dict) == True:
-                current_wf_name = success_condition_wf
-                break
+def calculate_ranges_product(ranges):
+    product = 1
+    for start, end in ranges.values():
+        product *= end - start + 1
+    return product
+
+
+
+def get_accepted_comb_number(ranges, wf_name, workflows):
+    # BASE CASE (1)
+    if wf_name == 'R':
+        return 0
+    # BASE CASE (2)
+    if wf_name == 'A': 
+        return calculate_ranges_product(ranges)
+
+    rules, default = workflows[wf_name] # rules: list of rules; default: default workflow name
+
+    total = 0
+    is_condition_impossible = False
+    for var, symb, num, target in rules:
+        start, end = ranges[var]
+        # Calculate the range for the true and false condition
+        if symb == "<":
+            rule_true_range = (start, num-1)
+            rule_false_range = (num, end)
+        else: # symb == GREATER:
+            rule_true_range = (num + 1, end)
+            rule_false_range = (start, num)
+        
+        if rule_true_range[0] <= rule_true_range[1]:
+            ranges_copy = dict(ranges)
+            ranges_copy[var] = rule_true_range
+            total += get_accepted_comb_number(ranges_copy, target, workflows)
+
+        if rule_false_range[0] <= rule_false_range[1]:
+            ranges = dict(ranges)
+            ranges[var] = rule_false_range
+        else:
+            # Impossible Condition 
+            is_condition_impossible = True
+            break
+
+    if not is_condition_impossible:
+        total += get_accepted_comb_number(ranges, default, workflows)
     
-    return current_wf_name == 'A'
+    return total
 
 
 def main():
@@ -31,18 +59,11 @@ def main():
     with open('input.txt', 'r') as f:
         file = f.read()
    
-    wf_file, parts_file = file.split('\n\n')   
-
-    # Parts parsing    
-    parts = set()
-    regex = re.compile('{x=(\d+),m=(\d+),a=(\d+),s=(\d+)}')
-    for line in parts_file.split('\n'):
-        match = re.fullmatch(regex, line)
-        parts.add(tuple(map(int, match.groups())))
+    wf_file, _ = file.split('\n\n')   
 
     # Workflow parsing 
     workflows = dict()
-    rule_regex = re.compile('([a-zA-Z]+[<>]\d+):([a-zA-Z]+)')
+    rule_regex = re.compile('([a-zA-Z]+)([<>])(\d+):([a-zA-Z]+)')
     for line in wf_file.split('\n'):
         # Name
         index_of_curly= line.index('{')
@@ -54,23 +75,22 @@ def main():
         rules = []
         matches = re.findall(rule_regex, rest_line)
         for match in matches:
-            rules.append((match[0], match[1]))
-            # print(match[0], match[1], match[2], match[3])
-        rules.append(('True', default))
-        workflows[name] = rules
+            rules.append((match[0], match[1], int(match[2]), match[3]))
 
-    # P: (parts) set of parts; each part is a 4-size tuple representing 'x','m','a','s' values
-    # WF: (workflows) dict of workflows; key=[workflow's name] value=[list of workfllow rules];
-    #     each rule is a 2-size tuple (condition, success_condition_workflow); the last rule
-    #     has 'True' as condition
+        workflows[name] = (rules, default)
 
-    total_sum = 0
-    for part in parts:
-        if is_accepted(part, workflows):
-            total_sum += sum(part)
-    # Part 1
+
+    rages_dict_0 = {
+        'x': (1, 4000),
+        'm': (1, 4000),
+        'a': (1, 4000),
+        's': (1, 4000)
+    }
+
+    sol = get_accepted_comb_number(rages_dict_0, 'in', workflows)
+
     print('Soluzione:')
-    print(total_sum)
+    print(sol)
 
 
 
