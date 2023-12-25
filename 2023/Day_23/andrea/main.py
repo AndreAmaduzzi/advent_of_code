@@ -2,7 +2,7 @@
 23th December, 2023
 """
 
-import sys
+
 from collections.abc import Iterator
 
 DIRECTIONS = {
@@ -75,10 +75,11 @@ def iter_hike_lengths(graph: dict[Pos, list[tuple[Pos, int]]], goal: Pos) -> Ite
 
 
 def main():
-    with open('input.txt', 'r') as f:
+    with open('test.txt', 'r') as f:
         lines = f.readlines()
 
     trail_map = list(line.rstrip('\n') for line in lines)
+    print(trail_map)
     goal = len(trail_map[0]) - 2, len(trail_map) - 1
     graph = get_graph(trail_map)
     print('Soluzione parte 1:')
