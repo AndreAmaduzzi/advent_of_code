@@ -2,14 +2,17 @@
 2st December, 2022
 '''
 
-WINS = {'X': 'C',
-        'Y': 'A',
-        'Z': 'B'}
+WINS = {'C': 'X',
+        'A': 'Y',
+        'B': 'Z'}
 
-LOSS = {'X': 'B',
-        'Y': 'C',
-        'Z': 'A'}
+LOSS = {'B': 'X',
+        'C': 'Y',
+        'A': 'Z'}
 
+DRAW = {'A': 'X',
+        'B': 'Y',
+        'C': 'Z'}
 
 def main():
     with open('input.txt', 'r') as f:
@@ -19,12 +22,16 @@ def main():
     for idx, line in enumerate(lines):
         enemy = line[0]
         me = line[2]
-        if WINS[me] == enemy:
-            points += 6
-        elif LOSS[me] == enemy:
-            points += 0
-        else:
+        if line[2] == 'X':
+            me = LOSS[enemy]
+        elif line[2] == 'Y':
+            me = DRAW[enemy]
             points += 3
+        else:
+            me = WINS[enemy]
+            points += 6
+
+        print(me)
 
         if me == 'X':
             points += 1
