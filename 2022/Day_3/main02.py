@@ -4,16 +4,11 @@
 
 import string
 
-def item_duplicate(ruck: str) -> list:
+def item_duplicate(group: str) -> list:
+    
     lst = []
-    delimiter = round((len(ruck) - 1) // 2)
-    s_1 = [ruck[i] for i in range(0, delimiter)]
-    if (len(ruck) - 1) % 2 != 0:
-        delimiter += 1
-    s_2 = [ruck[i] for i in range(delimiter, len(ruck) - 1)]
-
-    for i in s_1:
-        if i in s_2 and i not in lst:
+    for i in group[0]:
+        if i in group[1] and i in group[2] and i not in lst:
             lst.append(i)
 
     return lst
@@ -36,16 +31,26 @@ def duplicate_value(d: str) -> int:
                     count += value + 27
     return count
 
+
 def main():
 
     with open('input.txt', 'r') as f:
         lines = f.readlines()
 
     sum = 0
+    count_r = 0
+    group = []
     for line in lines:
-        duplicates = item_duplicate(line)
-        sum += duplicate_value(duplicates)
-        print(duplicates)
+
+        group.append(line[:-1])
+        count_r += 1
+
+        if count_r == 3:
+            duplicates = item_duplicate(group)
+            # print(duplicates)
+            sum += duplicate_value(duplicates)
+            group = []
+            count_r = 0
 
     print(sum)
 
