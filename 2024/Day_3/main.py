@@ -17,8 +17,14 @@ def mul(s):
 
 
 def main():
-   with open('test.txt') as f:
+   with open('input.txt') as f:
          data = f.read()
+
+   total = 0
+   for x in clean(data):
+         total = total + mul(x)
+
+   print(total)
 
    partition = re.split('(do\(\)|don\'t\(\))', data)
 
