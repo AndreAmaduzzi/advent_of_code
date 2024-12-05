@@ -17,7 +17,7 @@ def check_safe(list):
       diff = x - x_m1
       inc_dec = np.sign(diff)
       diff = abs(diff)
-      if inc_dec != inc_dec_m1 or diff > 2:
+      if inc_dec != inc_dec_m1 or diff < 1 or diff > 3:
          return False
       
       inc_dec_m1 = inc_dec
@@ -25,7 +25,7 @@ def check_safe(list):
    return True
 
 def main():
-   with open("test.txt") as f:
+   with open("input.txt") as f:
        rows = f.readlines()
 
    levels = []
@@ -38,6 +38,14 @@ def main():
          count += 1
    
    print(count)
+
+   count = 0
+   for level in levels:
+      if any([check_safe(level[:i] + level[i+1:]) for i in range(len(level))]):
+         count += 1
+   
+   print(count)
+
 
 if __name__ == "__main__":
     main()
