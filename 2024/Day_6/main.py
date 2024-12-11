@@ -45,13 +45,16 @@ def main():
    with open('input.txt') as f:
          lines = f.readlines()
 
-   map = [line.strip() for line in lines]
+   map = [list(line.strip()) for line in lines]
    
    n_rows = len(map)
    n_cols = len(map[0])
 
    p_guard = search_guard(map)
    act_dir = "^"
+
+   ini_p_guard = p_guard
+   ini_act_dir = act_dir
 
    visited_positions = set()
    visited_positions.add(p_guard)
@@ -61,6 +64,32 @@ def main():
       visited_positions.add(p_guard)
 
    print(len(visited_positions))
+
+   map_backup = [row[:] for row in map]  # Deep copy of the map
+   count_loop = 0
+   visited_positions.clear()
+   #save_sol = set()
+   for i in range(len(map)):
+      for j in range(len(map[0])):
+         map = [row[:] for row in map_backup]  # Reset map for each iteration
+         act_dir = ini_act_dir
+         p_guard = ini_p_guard
+         unique_position = (act_dir, p_guard)
+         visited_positions.add(unique_position)
+         map[j][i] = '#'
+         while check_pos_guards(p_guard, n_rows, n_cols, act_dir):
+            p_guard, act_dir = next_iteration(p_guard, act_dir, map)
+            if (act_dir, p_guard) in visited_positions:
+               count_loop = count_loop + 1
+               sol = (j, i)
+               #save_sol.add(sol)
+               break
+            unique_position = (act_dir, p_guard)
+            visited_positions.add(unique_position)
+         visited_positions.clear()
+   
+   print(count_loop)
+   #print(save_sol)
 
 
 if __name__ == "__main__":
