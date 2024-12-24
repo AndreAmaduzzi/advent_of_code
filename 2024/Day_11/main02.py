@@ -2,8 +2,6 @@
 11st December, 2024
 """
 
-
-
 memory = {}
 
 def solve(stone, blinks):
