@@ -7,7 +7,7 @@ moves = ""
 origgrid = []
 
 with open("input.txt") as f:
-   lines = f.read()
+   lines = f.readlines()
 
 for line in lines:
     if line.strip() == "":
@@ -55,8 +55,16 @@ def affecting(x,y):
     elif grid[x][y] == "]":
         return {(x,y), (x, y-1)}
     
+c_err = 0
 
 for move in moves:
+
+    if c_err == 1865:
+        for i in range(N):
+            print("".join(grid[i]))
+        
+    c_err += 1
+
     dir = symtodir[move]
     newloc = (cur_loc[0]+dir[0], cur_loc[1]+dir[1])
     if dir[0] == 0 or grid[newloc[0]][newloc[1]] == ".":
