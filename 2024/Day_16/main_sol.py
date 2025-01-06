@@ -26,5 +26,15 @@ while todo:
         if p not in grid: continue
         heappush(todo, (v, t, p, d, path + [p]))
 
+for pos in seen:
+    grid[pos] = 'M'
 
+for i in range (0, 141):
+    for j in range (0, 141):
+        pos = i+j*1j
+        if pos in grid:
+            print(grid[pos], end="")
+        else:
+            print("#", end="")
+    print()
 print(best, len(set(seen)))

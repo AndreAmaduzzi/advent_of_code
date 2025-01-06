@@ -33,40 +33,33 @@ def init_path(map):
    dirs = get_directions(map, x, y)
    return x, y, dirs
 
-def path_iter(map, x, y, dir, points, pos_cross, last_cross):
-   x_m1, y_m1 = last_cross
+def path_iter(map, x, y, dir, points, pos_cross):
    while map[y][x] != "E":
       dx, dy = direction[dir]
       x += dx
       y += dy
       points += 1
-      if (x, y) in pos_cross:
-         if (x_m1, y_m1) in pos_cross[(x, y)]:
-            if pos_cross[(x, y)][(x_m1, y_m1)] == -1:
-               return -1
-            else:
-               return points + pos_cross[(x, y)][(x_m1, y_m1)]
-      elif map[y][x] == "E":
+      if map[y][x] == "E":
          return points
       dirs = get_directions(map, x, y, dir)
       if len(dirs) > 1:
-         if (x, y) not in pos_cross:
-            pos_cross[(x, y)] = {}
-         pos_cross[(x, y)][(x_m1, y_m1)] = -1
+         points_dir = []
          for mov in dirs:
             res = 0
+            if (x, y, mov) in pos_cross:
+               res = pos_cross[(x, y, mov)]
+            else:
+               pos_cross[(x, y, mov)] = 1e9
+               res = path_iter(map, x, y, mov, res, pos_cross)
+            if res != -1 and (res < pos_cross[(x, y, mov)]):
+               pos_cross[(x, y, mov)] = res
             if mov != dir:
                res += 1000
-            res = path_iter(map, x, y, mov, res, pos_cross, (x, y))
-            if res != -1 and (res < pos_cross[(x, y)][(x_m1, y_m1)] or pos_cross[(x, y)][(x_m1, y_m1)] == -1):
-               pos_cross[(x, y)][(x_m1, y_m1)] = res
-         if pos_cross[(x, y)][(x_m1, y_m1)] == -1:
-            return -1
-         else:
-            points += pos_cross[(x, y)][(x_m1, y_m1)]
-            return points
+            points_dir.append(res)
+         points += min(points_dir)
+         return points
       elif len(dirs) == 0:
-         return -1
+         return 1e9
       else:
          if dirs[0] != dir:
             points += 1000
@@ -75,7 +68,7 @@ def path_iter(map, x, y, dir, points, pos_cross, last_cross):
    return points
 
 def main():
-   with open("test1.txt") as f:
+   with open("input.txt") as f:
       lines = f.readlines()
 
    map = [list(row[:-1]) for row in lines]
@@ -84,15 +77,14 @@ def main():
 
    print(x, y, dirs)
 
-   last_cross = (x, y)
    pos_cross = {}
-   points = -1
+   points = 1e9
    for dir in dirs:
       res = 0
       if dir != "<":
          res += 1000
-      res = path_iter(map, x, y, dir, res, pos_cross, last_cross)
-      if res != -1 and (res < points or points == -1):
+      res = path_iter(map, x, y, dir, res, pos_cross)
+      if res != -1 and res < points:
          points = res
 
    print(points)
