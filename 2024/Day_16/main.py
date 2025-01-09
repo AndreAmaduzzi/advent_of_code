@@ -53,6 +53,8 @@ def path_iter(map, x, y, dir, points, pos_cross):
                res = path_iter(map, x, y, mov, res, pos_cross)
             if res != -1 and (res < pos_cross[(x, y, mov)]):
                pos_cross[(x, y, mov)] = res
+            #elif pos_cross[(x, y, mov)] == 1e9:
+            #   pos_cross.pop((x, y, mov))
             if mov != dir:
                res += 1000
             points_dir.append(res)
@@ -68,14 +70,12 @@ def path_iter(map, x, y, dir, points, pos_cross):
    return points
 
 def main():
-   with open("input.txt") as f:
+   with open("test1.txt") as f:
       lines = f.readlines()
 
    map = [list(row[:-1]) for row in lines]
 
    x, y, dirs = init_path(map)
-
-   print(x, y, dirs)
 
    pos_cross = {}
    points = 1e9
