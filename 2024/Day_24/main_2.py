@@ -54,8 +54,8 @@ def main():
 
    def find_wire(op1: str, ins1: set[str]) -> str | None:
       for out, (op2, *ins2) in gates_map.items():
-          if op1 == op2 and ins1.issubset(set(ins2)):
-              return out
+         if op1 == op2 and ins1.issubset(set(ins2)):
+            return out
 
    def fix_bit(i: int) -> set[str]:
       curr_x, curr_y = make_x(i), make_y(i)
