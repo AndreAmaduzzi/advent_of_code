@@ -2,12 +2,14 @@
 11st December, 2022
 '''
 
+from math import prod
 
 def main():
    with open("input.txt") as f:
       ls = f.read().split("\n\n")
 
    monkeys = {}
+   modulo = 1
    for element in ls:
       line = element.split("\n")
       curr_monkey = {}
@@ -26,11 +28,10 @@ def main():
          elif word.startswith("If false:"):
             curr_monkey["false_target"] = int(word.split(" ")[5].strip())
       curr_monkey["inspections"] = 0
+      modulo *= curr_monkey["test"]
       monkeys[monkey_id] = curr_monkey
-   
-   # Simulate 20 rounds of monkey business
-   # Each monkey inspects its items and performs operations
-   for i in range(20):
+
+   for i in range(10000):
       for monkey_id, monkey in monkeys.items():
          items = monkey["items"]
          monkey["items"] = []
@@ -41,7 +42,7 @@ def main():
                expression = operation.split('=')[1].strip()
             else:
                expression = operation.strip()
-            new_value = eval(expression) // 3
+            new_value = eval(expression) % modulo
             if new_value % monkey["test"] == 0:
                target_monkey = monkey["true_target"]
             else:
